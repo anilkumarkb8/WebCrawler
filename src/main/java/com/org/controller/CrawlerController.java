@@ -22,9 +22,9 @@ public class CrawlerController {
 		
 		Set<String> pagesVisited = new HashSet<String>();
 		
-		pagesVisited = crawl.search("http://arstechnica.com/", "http://arstechnica.com/");
+		pagesVisited = crawl.search("http://www.iampriyankachopra.com/", "http://www.iampriyankachopra.com/");
 		
-		System.out.println(pagesVisited);
+		System.out.println(pagesVisited.toString());
 		
 		ModelAndView view = new ModelAndView("test");
 		view.addObject("name", name);

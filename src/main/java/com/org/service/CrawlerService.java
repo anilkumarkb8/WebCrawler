@@ -5,44 +5,44 @@ import java.util.regex.Pattern;
 
 public class CrawlerService {
 
-	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpe?g" + "|png|mp3|mp3|zip|gz))$");
+	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpe?g|png|mp3|mp3|zip|gz))$");
 	private Set<String> pagesVisited = new HashSet<String>();
 	private List<String> pagesToVisit = new LinkedList<String>();
 
 	/**
-	 * Our main launching point for the Spider's functionality. Internally it
-	 * creates spider legs that make an HTTP request and parse the response (the
-	 * web page).
+	 * Our main launching point for the crawler's functionality. Internally it
+	 * creates connections, that make an HTTP request and parse the response
+	 * (the web page).
 	 * 
 	 * @param url
-	 *            - The starting point of the spider
-	 * @param searchWord
-	 *            - The word or string that you are searching for
+	 *            - The starting point of the crawler
+	 * @param urlValidator
+	 *            - The the thread which contains the base of URL
 	 */
 	public Set<String> search(String url, String urlValidator) {
-		
-		do{
+
+		do {
 			String currentUrl;
-			CustomCrawlerImpl leg = new CustomCrawlerImpl();
+			CustomCrawlerImpl crawler = new CustomCrawlerImpl();
 			if (this.pagesToVisit.isEmpty()) {
 				currentUrl = url;
 				this.pagesVisited.add(url);
 			} else {
-				currentUrl = this.nextUrl();
-				if(FILTERS.matcher(currentUrl).matches()){
-					currentUrl = this.nextUrl();
+				currentUrl = this.nextUrl(urlValidator);
+				if (currentUrl.equals("empty")) {
+					System.out.println("No More results to be crawled");
+					break;
+
 				}
+
 			}
-			
-			boolean status = leg.crawl(currentUrl);
+
+			boolean status = crawler.crawl(currentUrl);
 			if (status) {
-				this.pagesToVisit.addAll(leg.getLinks());
+				this.pagesToVisit.addAll(crawler.getLinks());
 			}
-		} while(this.pagesVisited.size() > 0);
-			
-		
-		
-		
+		} while (this.pagesToVisit.size() > 0);
+
 		System.out.println("\n**Done** Visited " + this.pagesVisited.size() + " web page(s)");
 		return pagesVisited;
 	}
@@ -54,10 +54,26 @@ public class CrawlerService {
 	 * 
 	 * @return
 	 */
-	private String nextUrl() {
+	private String nextUrl(String urlValidator) {
+
+		// Checking if the pages to be visited is empty, before proceeding with
+		// fetching the next item in list.
+
 		String nextUrl;
 		do {
-			nextUrl = this.pagesToVisit.remove(0);
+
+			if (this.pagesToVisit.isEmpty()) {
+				return "empty";
+			}
+
+			nextUrl = this.pagesToVisit.get(0);
+			// checking to see if the next url is for image or js or css or mp3
+			// file. As crawling on those links wont yield any data
+			if (FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(urlValidator.toLowerCase())) {
+				this.pagesVisited.add(nextUrl);
+				this.pagesToVisit.remove(0);
+			}
+
 		} while (this.pagesVisited.contains(nextUrl));
 		this.pagesVisited.add(nextUrl);
 		return nextUrl;
