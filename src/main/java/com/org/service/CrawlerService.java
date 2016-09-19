@@ -30,7 +30,7 @@ public class CrawlerService {
 			} else {
 				currentUrl = this.nextUrl(urlValidator);
 				if (currentUrl.equals("empty")) {
-					System.out.println("No More results to be crawled");
+					
 					break;
 
 				}
@@ -40,6 +40,7 @@ public class CrawlerService {
 			boolean status = crawler.crawl(currentUrl);
 			if (status) {
 				this.pagesToVisit.addAll(crawler.getLinks());
+				System.out.println(crawler.getLinks().toString());
 			}
 		} while (this.pagesToVisit.size() > 0);
 
@@ -66,12 +67,13 @@ public class CrawlerService {
 				return "empty";
 			}
 
-			nextUrl = this.pagesToVisit.get(0);
+			nextUrl = this.pagesToVisit.remove(0);
+			//System.out.println(nextUrl);
 			// checking to see if the next url is for image or js or css or mp3
-			// file. As crawling on those links wont yield any data
-			if (FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(urlValidator.toLowerCase())) {
+			// file. As crawling on those links wont yield any data    FILTERS.matcher(nextUrl).matches() ||
+			if ( FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(urlValidator.toLowerCase())) {
 				this.pagesVisited.add(nextUrl);
-				this.pagesToVisit.remove(0);
+				//this.pagesToVisit.remove(0);
 			}
 
 		} while (this.pagesVisited.contains(nextUrl));
