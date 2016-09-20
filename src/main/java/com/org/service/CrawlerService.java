@@ -58,6 +58,7 @@ public class CrawlerService {
 		} while (this.pagesToVisit.size() > 0);
 
 		System.out.println("\n**Done** Visited " + this.pagesVisited.size() + " web page(s)");
+		
 		return pagesVisited;
 	}
 
