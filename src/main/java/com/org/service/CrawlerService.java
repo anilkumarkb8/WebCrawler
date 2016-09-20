@@ -16,8 +16,6 @@ public class CrawlerService {
 	 * 
 	 * @param url
 	 *            - The starting point of the crawler
-	 * @param urlValidator
-	 *            - The the thread which contains the base of URL
 	 */
 	public Set<String> search(String url) {
 
@@ -30,7 +28,7 @@ public class CrawlerService {
 			} else {
 				currentUrl = this.nextUrl(url);
 				if (currentUrl.equals("empty")) {
-					
+
 					break;
 
 				}
@@ -41,7 +39,7 @@ public class CrawlerService {
 			if (status) {
 				this.pagesToVisit.addAll(crawler.getLinks());
 				System.out.println(crawler.getLinks().toString());
-			}else{
+			} else {
 				System.out.println("Crawl Failed for " + currentUrl);
 			}
 		} while (this.pagesToVisit.size() > 0);
@@ -59,9 +57,10 @@ public class CrawlerService {
 	 */
 	private String nextUrl(String urlValidator) {
 
-		// Checking if the pages to be visited is empty, before proceeding with
-		// fetching the next item in list.
-
+		/**
+		 * Checking if the pages to be visited is empty, before proceeding with
+		 * fetching the next item in list.
+		 */
 		String nextUrl;
 		do {
 
@@ -70,12 +69,15 @@ public class CrawlerService {
 			}
 
 			nextUrl = this.pagesToVisit.remove(0);
-			//System.out.println(nextUrl);
-			// checking to see if the next url is for image or js or css or mp3
-			// file. As crawling on those links wont yield any data    FILTERS.matcher(nextUrl).matches() ||
-			if ( FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(urlValidator.toLowerCase())) {
+			 System.out.println(nextUrl);
+			/*
+			 * checking to see if the next url is for image or js or css or mp3
+			 * file. As crawling on those links wont yield any data
+			 * FILTERS.matcher(nextUrl).matches() ||
+			 */
+			if (FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(urlValidator.toLowerCase())) {
 				this.pagesVisited.add(nextUrl);
-				//this.pagesToVisit.remove(0);
+				// this.pagesToVisit.remove(0);
 			}
 
 		} while (this.pagesVisited.contains(nextUrl));
