@@ -3,6 +3,10 @@ package com.org.service;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * This method hold the business logic for crawling through the URL supplied.
+ * 
+ */
 public class CrawlerService {
 
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpe?g|png|mp3|mp3|zip|gz))$");
@@ -10,12 +14,21 @@ public class CrawlerService {
 	private List<String> pagesToVisit = new LinkedList<String>();
 
 	/**
-	 * Our main launching point for the crawler's functionality. Internally it
-	 * creates connections, that make an HTTP request and parse the response
-	 * (the web page).
+	 * This method crawls through the url supplied to it.
+	 * 
+	 * It performs validations such as:
+	 * 
+	 * - Check if the URL belongs to same domain or not. If yes, then crawl
+	 * deep. Else, move to next URL in list.
+	 * 
+	 * - Checks if the URL is Browsable link. If its not then it moves to next
+	 * link without considering the current one for further crawling
 	 * 
 	 * @param url
 	 *            - The starting point of the crawler
+	 * 
+	 * @return pagesVisited - Returns all the links which have been fetched from
+	 *         supplied input in its domain by deep crawling
 	 */
 	public Set<String> search(String url) {
 
@@ -53,11 +66,23 @@ public class CrawlerService {
 	 * also do a check to make sure this method doesn't return a URL that has
 	 * already been visited.
 	 * 
-	 * @return
+	 * It also performs validations such as:
+	 * 
+	 * - Check if the URL belongs to same domain or not. If yes, then crawl
+	 * deep. Else, move to next URL in list.
+	 * 
+	 * - Checks if the URL is Browsable link. If its not then it moves to next
+	 * link without considering the current one for further crawling
+	 * 
+	 * @param url:
+	 *            - URL on which the above mentioned checks are to be done
+	 * 
+	 * @return 
+	 *            - Next URL to be Browsed
 	 */
-	private String nextUrl(String urlValidator) {
+	private String nextUrl(String url) {
 
-		/**
+		/*
 		 * Checking if the pages to be visited is empty, before proceeding with
 		 * fetching the next item in list.
 		 */
@@ -69,13 +94,13 @@ public class CrawlerService {
 			}
 
 			nextUrl = this.pagesToVisit.remove(0);
-			 System.out.println(nextUrl);
+			System.out.println(nextUrl);
 			/*
 			 * checking to see if the next url is for image or js or css or mp3
-			 * file. As crawling on those links wont yield any data
-			 * FILTERS.matcher(nextUrl).matches() ||
+			 * file. As crawling on those links wont yield any data And also
+			 * checking if the link belongs to the domain entered by user or not
 			 */
-			if (FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(urlValidator.toLowerCase())) {
+			if (FILTERS.matcher(nextUrl).matches() || !nextUrl.toLowerCase().contains(url.toLowerCase())) {
 				this.pagesVisited.add(nextUrl);
 				// this.pagesToVisit.remove(0);
 			}
