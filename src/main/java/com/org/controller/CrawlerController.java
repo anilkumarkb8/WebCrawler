@@ -22,7 +22,7 @@ public class CrawlerController {
 		
 		Set<String> pagesVisited = new HashSet<String>();
 		
-		pagesVisited = crawl.search("http://wiprodigital.com/", "http://wiprodigital.com/");
+		pagesVisited = crawl.search("http://wiprodigital.com/");
 		
 		System.out.println(pagesVisited.toString());
 		

@@ -19,7 +19,7 @@ public class CrawlerService {
 	 * @param urlValidator
 	 *            - The the thread which contains the base of URL
 	 */
-	public Set<String> search(String url, String urlValidator) {
+	public Set<String> search(String url) {
 
 		do {
 			String currentUrl;
@@ -28,7 +28,7 @@ public class CrawlerService {
 				currentUrl = url;
 				this.pagesVisited.add(url);
 			} else {
-				currentUrl = this.nextUrl(urlValidator);
+				currentUrl = this.nextUrl(url);
 				if (currentUrl.equals("empty")) {
 					
 					break;
@@ -41,6 +41,8 @@ public class CrawlerService {
 			if (status) {
 				this.pagesToVisit.addAll(crawler.getLinks());
 				System.out.println(crawler.getLinks().toString());
+			}else{
+				System.out.println("Crawl Failed for " + currentUrl);
 			}
 		} while (this.pagesToVisit.size() > 0);
 
