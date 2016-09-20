@@ -8,6 +8,6 @@
 <%@ page isELIgnored="false"%>
 </head>
 <body>
-	<h2>afbc Parameter received , ${status}.</h2>
+	<h2>Parameter received , ${name}.</h2>
 </body>
 </html>
