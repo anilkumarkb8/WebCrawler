@@ -1,6 +1,7 @@
 package com.org.controller;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.springframework.stereotype.Controller;
@@ -19,20 +20,21 @@ public class CrawlerController {
 	
 	@RequestMapping(value = "/crawler", method = RequestMethod.POST)
 	 	public ModelAndView testMessage(@ModelAttribute("iURL") InputURL inputURL) {
-	  		ModelAndView view = new ModelAndView("test");
+	  		ModelAndView view = new ModelAndView("crawlerResults");
 	 		UrlValidatorService urlValidatorService = new UrlValidatorService();
 	 		CrawlerService crawl = new CrawlerService();
 	 
 	 		if (urlValidatorService.isUrlValid(inputURL.getInputUrl())) {
 	 			Set<String> pagesVisited = new HashSet<String>();
-	 
+	 			
 	 			// pagesVisited = crawl.search("http://wiprodigital.com/");
 	 			pagesVisited = crawl.search(inputURL.getInputUrl());
 	 
 	 			System.out.println(pagesVisited.toString());
-	 			view.addObject("name", "Success");
+	 			view.addObject("status", "Success");
+	 			view.addObject("pagesVisited", pagesVisited);
 	 		} else {
-	 			view.addObject("name", "Failure");
+	 			view.addObject("status", "Failure : Please supply valid URL");
 	 		}
 	 
 	  		return view;
