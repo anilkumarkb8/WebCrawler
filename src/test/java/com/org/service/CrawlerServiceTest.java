@@ -23,12 +23,12 @@ public class CrawlerServiceTest {
 		crawlService = null;
 	}
 
-	/*@Test
+	@Test
 	public void testSearchForValidUrl() {
 		String url = "http://wiprodigital.com/";
 		Set<String> crawlSet = crawlService.search(url);
 		Assert.assertNotNull(crawlSet);
-	}*/
+	}
 
 	@Test
 	public void testSearchForInvalidUrl() {
